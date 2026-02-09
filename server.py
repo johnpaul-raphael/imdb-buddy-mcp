@@ -1,12 +1,20 @@
 from mcp.server.fastmcp import FastMCP
 import httpx
 import os
+import logging
+
+# Configure logging for debugging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize FastMCP server
 mcp = FastMCP("MovieExplorer")
 
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
+
+logger.info(f"Starting MovieExplorer MCP server")
+logger.info(f"TMDB_API_KEY set: {bool(TMDB_API_KEY)}")
 
 # Common TMDB Genre IDs
 GENRES = {
@@ -75,4 +83,6 @@ async def find_movies(media_type: str = "movie", min_rating: float = 7.0, langua
 if __name__ == "__main__":
     # Use 'stdio' for Claude Desktop; switch to 'http' for remote/ChatGPT use
     # AWS Lambda Web Adapter will call this on port 8080
+    port = int(os.environ.get("PORT", "8080"))
+    logger.info(f"Starting server on port {port} with SSE transport")
     mcp.run(transport="sse")
