@@ -3,13 +3,16 @@ name: Deploy to AWS Lambda
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # This adds the manual "Run" button!
-  
-permissions:
-  id-token: write   # Required for AWS OIDC (if you use it later)
-  contents: read    # Required to checkout the code
+  workflow_dispatch:  # Manual "Run" button
 
-steps:
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Check Secret Presence
         run: |
           if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
@@ -18,10 +21,6 @@ steps:
             echo "❌ AWS_ACCESS_KEY_ID is EMPTY"
           fi
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -34,7 +33,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2 # Updated to v2
 
       - name: Build and Push Docker Image
         env:
