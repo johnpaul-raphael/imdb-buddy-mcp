@@ -3,10 +3,20 @@ name: Deploy to AWS Lambda
 on:
   push:
     branches: [ main ]
-
+  workflow_dispatch:  # This adds the manual "Run" button!
+  
 permissions:
   id-token: write   # Required for AWS OIDC (if you use it later)
   contents: read    # Required to checkout the code
+
+steps:
+      - name: Check Secret Presence
+        run: |
+          if [ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "✅ AWS_ACCESS_KEY_ID is FOUND (masked as ***)"
+          else
+            echo "❌ AWS_ACCESS_KEY_ID is EMPTY"
+          fi
 
 jobs:
   deploy:
