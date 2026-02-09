@@ -17,12 +17,7 @@ GENRES = {
 }
 
 @mcp.tool()
-async def find_content(
-    media_type: str = "movie", 
-    min_rating: float = 7.0, 
-    language: str = "en",
-    genre_name: str = None
-) -> str:
+async def find_movies(media_type: str = "movie", min_rating: float = 7.0, language: str = "en", genre_name: str = None) -> str:
     """
     Find movies or TV series based on rating, language, and genre.
     
@@ -79,4 +74,5 @@ async def find_content(
 
 if __name__ == "__main__":
     # Use 'stdio' for Claude Desktop; switch to 'http' for remote/ChatGPT use
-    mcp.run(transport="stdio")
+    # AWS Lambda Web Adapter will call this on port 8080
+    mcp.run(transport="sse")
