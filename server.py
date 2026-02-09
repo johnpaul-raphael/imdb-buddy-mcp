@@ -25,7 +25,7 @@ async def find_movies(media_type: str = "movie", min_rating: float = 7.0, langua
         media_type: Use 'movie' for films or 'tv' for web series/shows.
         min_rating: Minimum rating (0.0 to 10.0).
         language: ISO code like 'en', 'es', 'fr', 'hi'.
-        genre_name: Optional genre like 'action', 'comedy', 'sci-fi', etc.
+        genre_name: Optional genre like 'action', 'comedy', 'sci-fi', etc
     """
     if not TMDB_API_KEY:
         return "Error: TMDB_API_KEY not set in environment."
