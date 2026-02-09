@@ -1,0 +1,28 @@
+# --- Security ---
+# NEVER upload your API keys or secret environment variables
+.env
+secret_key.txt
+
+# --- Python ---
+# Ignore compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
+# Ignore your local environment folder
+venv/
+env/
+.venv/
+ENV/
+
+# --- IDEs & Editors ---
+# Ignore settings for VS Code and PyCharm
+.vscode/
+.idea/
+.DS_Store
+
+# --- MCP Specific ---
+# If you use the MCP Inspector, ignore its local logs/cache
+.mcp/
+mcp_debug.log
