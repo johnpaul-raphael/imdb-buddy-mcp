@@ -11,8 +11,6 @@ RUN chmod +x /opt/extensions/lambda-adapter
 
 ENV PORT=8080
 ENV AWS_LWA_INVOKE_MODE=RESPONSE_STREAM
-ENV AWS_LWA_READINESS_CHECK_PATH=/health
-ENV AWS_LWA_READINESS_CHECK_PORT=8080
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt

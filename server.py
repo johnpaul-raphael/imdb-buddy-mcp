@@ -1,11 +1,25 @@
-from mcp.server.fastmcp import FastMCP
-import httpx
 import os
+import sys
 import logging
 
-# Configure logging for debugging
-logging.basicConfig(level=logging.INFO)
+# Configure logging first
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
+)
 logger = logging.getLogger(__name__)
+
+logger.info("Python starting up...")
+logger.info(f"Python version: {sys.version}")
+
+try:
+    from mcp.server.fastmcp import FastMCP
+    import httpx
+    logger.info("Successfully imported FastMCP and httpx")
+except Exception as e:
+    logger.error(f"Import error: {e}")
+    raise
 
 # Initialize FastMCP server
 mcp = FastMCP("MovieExplorer")
@@ -13,7 +27,6 @@ mcp = FastMCP("MovieExplorer")
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
 
-logger.info(f"Starting MovieExplorer MCP server")
 logger.info(f"TMDB_API_KEY set: {bool(TMDB_API_KEY)}")
 
 # Common TMDB Genre IDs
@@ -81,8 +94,12 @@ async def find_movies(media_type: str = "movie", min_rating: float = 7.0, langua
     return "\n---\n".join(formatted_list)
 
 if __name__ == "__main__":
-    # Use 'stdio' for Claude Desktop; switch to 'http' for remote/ChatGPT use
-    # AWS Lambda Web Adapter will call this on port 8080
-    port = int(os.environ.get("PORT", "8080"))
-    logger.info(f"Starting server on port {port} with SSE transport")
-    mcp.run(transport="sse")
+    try:
+        port = int(os.environ.get("PORT", "8080"))
+        logger.info(f"Starting server on port {port} with SSE transport")
+        mcp.run(transport="sse")
+    except Exception as e:
+        logger.error(f"Failed to start server: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        sys.exit(1)
